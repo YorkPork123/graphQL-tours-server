@@ -490,6 +490,7 @@ const context = async ({ req }) => {
 const server = new ApolloServer({
   schema,
   context,
+  introspection: true,
 });
 
 // Запуск сервера с тестовыми данными
