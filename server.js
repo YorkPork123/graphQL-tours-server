@@ -138,125 +138,125 @@ Order.belongsTo(Tour);
 
 // GraphQL схема
 const typeDefs = `
-  type Query {
-  # Туры
-  tours: [Tour!]!
-  tour(id: ID!): Tour
-  activeTours: [Tour!]!
-  toursByCity(city: String!): [Tour!]!
+    type Query {
+    # Туры
+    tours: [Tour!]!
+    tour(id: ID!): Tour
+    activeTours: [Tour!]!
+    toursByCity(city: String!): [Tour!]!
+    
+    # Музеи
+    museums: [Museum!]!
+    museum(id: ID!): Museum
+    
+    # Пользователи
+    users: [User!]!
+    user(id: ID!): User
+    currentUser: User
+    
+    # Заказы
+    orders: [Order!]!
+    order(id: ID!): Order
+    userOrders(userId: ID!): [Order!]!
+  }
   
-  # Музеи
-  museums: [Museum!]!
-  museum(id: ID!): Museum
+  type Mutation {
+    # Музеи
+    createMuseum(input: MuseumInput!): Museum!
+    updateMuseum(id: ID!, input: MuseumInput!): Museum!
+    deleteMuseum(id: ID!): Boolean!
+    
+    # Туры
+    createTour(input: TourInput!): Tour!
+    updateTour(id: ID!, input: TourInput!): Tour!
+    deleteTour(id: ID!): Boolean!
+    toggleTourStatus(id: ID!): Tour!
+    
+    # Пользователи
+    createUser(input: UserInput!): AuthPayload!
+    login(input: LoginInput!): AuthPayload!
+    updateUser(id: ID!, input: UserInput!): User!
+    deleteUser(id: ID!): Boolean!
+    
+    # Заказы
+    createOrder(input: OrderInput!): Order!
+    confirmOrder(id: ID!): Order!
+    cancelOrder(id: ID!): Order!
+  }
   
-  # Пользователи
-  users: [User!]!
-  user(id: ID!): User
-  currentUser: User
+  # Типы данных
+  type Museum {
+    id: ID!
+    name: String!
+    city: String!
+  }
   
-  # Заказы
-  orders: [Order!]!
-  order(id: ID!): Order
-  userOrders(userId: ID!): [Order!]!
-}
-
-type Mutation {
-  # Музеи
-  createMuseum(input: MuseumInput!): Museum!
-  updateMuseum(id: ID!, input: MuseumInput!): Museum!
-  deleteMuseum(id: ID!): Boolean!
+  type Tour {
+    id: ID!
+    title: String!
+    description: String!
+    city: String!
+    price: Float!
+    transfer: Boolean!
+    isActive: Boolean!
+    museums: [Museum!]!
+  }
   
-  # Туры
-  createTour(input: TourInput!): Tour!
-  updateTour(id: ID!, input: TourInput!): Tour!
-  deleteTour(id: ID!): Boolean!
-  toggleTourStatus(id: ID!): Tour!
+  type User {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    orders: [Order!]!
+  }
   
-  # Пользователи
-  createUser(input: UserInput!): AuthPayload!
-  login(input: LoginInput!): AuthPayload!
-  updateUser(id: ID!, input: UserInput!): User!
-  deleteUser(id: ID!): Boolean!
+  type Order {
+    id: ID!
+    tour: Tour!
+    cost: Float!
+    isConfirmed: Boolean!
+    timestamp: String!
+    user: User!
+  }
   
-  # Заказы
-  createOrder(input: OrderInput!): Order!
-  confirmOrder(id: ID!): Order!
-  cancelOrder(id: ID!): Order!
-}
-
-# Типы данных
-type Museum {
-  id: ID!
-  name: String!
-  city: String!
-}
-
-type Tour {
-  id: ID!
-  title: String!
-  description: String!
-  city: String!
-  price: Float!
-  transfer: Boolean!
-  isActive: Boolean!
-  museums: [Museum!]!
-}
-
-type User {
-  id: ID!
-  firstName: String!
-  lastName: String!
-  email: String!
-  orders: [Order!]!
-}
-
-type Order {
-  id: ID!
-  tour: Tour!
-  cost: Float!
-  isConfirmed: Boolean!
-  timestamp: String!
-  user: User!
-}
-
-type AuthPayload {
-  token: String!
-  user: User!
-}
-
-# Input типы
-input MuseumInput {
-  name: String!
-  city: String!
-}
-
-input TourInput {
-  title: String!
-  description: String!
-  city: String!
-  price: Float!
-  transfer: Boolean
-  isActive: Boolean
-  museumIds: [ID!]
-}
-
-input UserInput {
-  firstName: String!
-  lastName: String!
-  email: String!
-  password: String!
-}
-
-input OrderInput {
-  tourId: ID!
-  userId: ID!
-  cost: Float!
-}
-
-input LoginInput {
-  email: String!
-  password: String!
-}
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+  
+  # Input типы
+  input MuseumInput {
+    name: String!
+    city: String!
+  }
+  
+  input TourInput {
+    title: String!
+    description: String!
+    city: String!
+    price: Float!
+    transfer: Boolean
+    isActive: Boolean
+    museumIds: [ID!]
+  }
+  
+  input UserInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+  }
+  
+  input OrderInput {
+    tourId: ID!
+    userId: ID!
+    cost: Float!
+  }
+  
+  input LoginInput {
+    email: String!
+    password: String!
+  }
 `;
 
 // Реализация резолверов
